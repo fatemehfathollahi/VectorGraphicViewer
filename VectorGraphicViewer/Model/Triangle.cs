@@ -5,11 +5,18 @@ using VectorGraphicViewer.Contract;
 namespace VectorGraphicViewer.Model;
 public class Triangle : Shape
 {
-    public Point A { get; set; } = null!;
-    public Point B { get; set; } = null!;
-    public Point C { get; set; } = null!;
-    public double Radius { get; set; }
-    public bool Filled { get; set; }
+    public Triangle(Point a, Point b, Point c, bool filled, Color color)
+    {
+        A = a;
+        B = b;
+        C = c;
+        Filled = filled;
+        Color = color;
+    }
+    public Point A { get; init; } = null!;
+    public Point B { get; init; } = null!;
+    public Point C { get; init; } = null!;
+    public bool Filled { get; init; }
 
     public override void Draw(Canvas canvas, double zoomLevel = 1.0)
     {

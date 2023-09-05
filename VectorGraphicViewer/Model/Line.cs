@@ -5,8 +5,15 @@ using VectorGraphicViewer.Contract;
 namespace VectorGraphicViewer.Model;
 public class Line : Shape
 {
-    public Point A { get; set; } = null!;
-    public Point B { get; set; } = null!;
+    public Line(Point a, Point b, Color color)
+    {
+        A = a;
+        B = b;
+        Color = color;
+    }
+    public Point A { get; init; } = null!;
+    public Point B { get; init; } = null!;
+
     public override void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
         var line = new System.Windows.Shapes.Line

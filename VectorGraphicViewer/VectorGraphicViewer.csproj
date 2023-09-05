@@ -8,9 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Mappers\" />
-    <Folder Include="Contract\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

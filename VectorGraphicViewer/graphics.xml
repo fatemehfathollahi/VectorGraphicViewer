@@ -1,0 +1,23 @@
+﻿<Shapes>
+	<Shape>
+		<Type>line</Type>
+		<A>-1,5; 3,4</A>
+		<B>2,2; 5,7</B>
+		<Color>127; 255; 255; 255</Color>
+	</Shape>
+	<Shape>
+		<Type>circle</Type>
+		<Center>0; 0</Center>
+		<Radius>15.0</Radius>
+		<Filled>false</Filled>
+		<Color>127; 255; 0; 0</Color>
+	</Shape>
+	<Shape>
+		<Type>triangle</Type>
+		<A>-15; -20</A>
+		<B>15; -20,3</B>
+		<C>0; 21</C>
+		<Filled>true</Filled>
+		<Color>127; 255; 0; 255</Color>
+	</Shape>
+</Shapes>

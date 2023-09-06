@@ -3,7 +3,7 @@ using System.Windows.Media;
 using VectorGraphicViewer.Contract;
 
 namespace VectorGraphicViewer.Model;
-public class Circle : Shape
+public class Circle : Shape, IShapeFactory
 {
     public Point Center { get; init; } = null!;
     public double Radius { get; init; }
@@ -17,7 +17,7 @@ public class Circle : Shape
         Color = color;
     }
 
-    public override void Draw(Canvas canvas, double zoomLevel = 1.0)
+    public void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
         double diameter = 2 * Radius;
         if (diameter >= 100)

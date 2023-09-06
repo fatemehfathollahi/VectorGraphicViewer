@@ -1,11 +1,9 @@
 ﻿using System.Windows.Media;
-using VectorGraphicViewer.Model;
 
 namespace VectorGraphicViewer.Model;
-
 public class Graphic
 {
-    public Graphic(string type, Point a, Point b, Point c, Point center, double radius, bool filled , Color color)
+    public Graphic(string type, Point a, Point b, Point c, Point center, double radius, bool filled, Color color)
     {
         Type = type;
         A = a;

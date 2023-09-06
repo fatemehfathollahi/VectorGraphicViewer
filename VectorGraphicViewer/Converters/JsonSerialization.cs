@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using VectorGraphicViewer.Contract;
 using VectorGraphicViewer.Model;
+using VectorGraphicViewer.ViewModel;
 
 namespace VectorGraphicViewer.Converters;
 
@@ -9,6 +11,16 @@ public class JsonSerialization : ISerialization
 {
     public List<Graphic> Deserialize(string data)
     {
-      return  JsonSerializer.Deserialize<List<Graphic>>(data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!;
+        try
+        {
+           List<ShapeDTO> shapeDto = JsonSerializer.Deserialize<List<ShapeDTO>>(data, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true })!;
+            if(shapeDto != null)
+                return shapeDto.Select(shape => ShapeMapper.ToGraphic(shape)).ToList();
+        }
+        catch (JsonException exception)
+        {
+            throw exception;
+        }
+        return new List<Graphic>();
     }
 }

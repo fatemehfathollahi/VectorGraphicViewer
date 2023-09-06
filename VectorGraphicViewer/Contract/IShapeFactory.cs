@@ -1,6 +1,8 @@
-﻿namespace VectorGraphicViewer.Contract;
+﻿using System.Windows.Controls;
+
+namespace VectorGraphicViewer.Contract;
 
 public interface IShapeFactory
 {
-    //void CreateShape(Shape shape);
+    void Draw(Canvas canvas, double zoomLevel = 1.0);
 }

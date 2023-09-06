@@ -3,7 +3,7 @@ using System.Windows.Media;
 using VectorGraphicViewer.Contract;
 
 namespace VectorGraphicViewer.Model;
-public class Line : Shape
+public class Line : Shape, IShapeFactory
 {
     public Line(Point a, Point b, Color color)
     {
@@ -14,7 +14,7 @@ public class Line : Shape
     public Point A { get; init; } = null!;
     public Point B { get; init; } = null!;
 
-    public override void Draw(Canvas canvas, double zoomLevel = 1.0)
+    public void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
         var line = new System.Windows.Shapes.Line
         {

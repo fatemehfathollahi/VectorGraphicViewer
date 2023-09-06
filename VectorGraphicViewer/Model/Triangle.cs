@@ -3,7 +3,7 @@ using System.Windows.Media;
 using VectorGraphicViewer.Contract;
 
 namespace VectorGraphicViewer.Model;
-public class Triangle : Shape
+public class Triangle : Shape, IShapeFactory
 {
     public Triangle(Point a, Point b, Point c, bool filled, Color color)
     {
@@ -18,7 +18,7 @@ public class Triangle : Shape
     public Point C { get; init; } = null!;
     public bool Filled { get; init; }
 
-    public override void Draw(Canvas canvas, double zoomLevel = 1.0)
+    public void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
         var polygon = new System.Windows.Shapes.Polygon
         {

@@ -5,13 +5,13 @@ using VectorGraphicViewer.Converters;
 namespace VectorGraphicViewer.Services;
 public class SerializationrFactory
 {
-    public ISerialization CreateConverter(FileType fileType)
+    public ISerialization CreateConverter(string fileExtension)
     {
-        switch (fileType)
+        switch (fileExtension)
         {
-            case FileType.Json:
+            case "json":
                return  new JsonSerialization();
-            case FileType.Xml:
+            case "xml":
                return new XmlSerialization();
             default:
                 throw new ArgumentException("Invalid file type.");

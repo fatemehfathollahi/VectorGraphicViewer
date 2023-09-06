@@ -5,7 +5,7 @@ using VectorGraphicViewer.Model;
 namespace VectorGraphicViewer.Converters;
 public class ShapeSerializer
 {
-    private readonly ISerialization _serialization;
+    private readonly  ISerialization _serialization;
     public ShapeSerializer(ISerialization serialization)
     {
         _serialization = serialization;
@@ -13,6 +13,6 @@ public class ShapeSerializer
 
     public List<Graphic> Deserialize(string data)
     {
-        return _serialization.Deserialize(data);
+        return _serialization!.Deserialize(data);
     }
 }

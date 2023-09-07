@@ -5,11 +5,10 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Shapes;
 using VectorGraphicViewer.Model;
 using VectorGraphicViewer.Services.Factory;
-using VectorGraphicViewer.View;
+using VectorGraphicViewer.Services.Visitor;
 using WinLine = System.Windows.Shapes.Line;
 
 namespace VectorGraphicViewer
@@ -24,40 +23,29 @@ namespace VectorGraphicViewer
         }
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
             System.Windows.Point mousePosition = e.GetPosition(canvas);
 
             foreach (UIElement element in canvas.Children)
             {
                 if (element is Ellipse circle && IsMouseOverCircle(circle, mousePosition))
                 {
-                    // circle.StrokeDashArray = new DoubleCollection() { 5, 2 };
-
-                    EditCircleDialog dialog = new EditCircleDialog(circle);
-                    double circleCenterX = Canvas.GetLeft(circle) + circle.Width / 2;
-                    double circleCenterY = Canvas.GetTop(circle) + circle.Height / 2;
-                    double circleRadius = circle.Width / 2;
-                    var circleBorderBrush = circle.Stroke as SolidColorBrush;
-
-                    dialog.CenterXTextBox.Text = circleCenterX.ToString();
-                    dialog.CenterYTextBox.Text = circleCenterY.ToString();
-                    dialog.RadiusTextBox.Text = circleRadius.ToString();
-                    dialog.comboBox.SelectedItem = circleBorderBrush!.Color;
-                    if (circle.Fill != null)
-                        dialog.fillCheckBox.IsChecked = true;
-                    if (dialog.ShowDialog() == true) { }
+                    CircleVisitor circleVisitor = new CircleVisitor(circle);
+                    circleVisitor.Accept(new ShapeSelectionVisitor());
                 }
                 if (element is Polygon triangle && IsMouseOverTriangle(triangle, mousePosition))
                 {
-                    MessageBox.Show($"Clicked on Triangle");
-                    //TODO: Immplemnt EditTriangleDialog
-                }
+                    MessageBox.Show($"Clicked on Triangle"); // TODO: Remove this line after immplement EditTriangleDialog
 
-                // بررسی خطوط
+                    TriangleVisitor triangleVisitor = new TriangleVisitor(triangle);
+                    triangleVisitor.Accept(new ShapeSelectionVisitor());
+
+                }
                 if (element is WinLine line && IsMouseOverLine(line, mousePosition))
                 {
-                    MessageBox.Show($"Clicked on Line");
-                    //TODO: Immplement EditLineDialog
+                    MessageBox.Show($"Clicked on Line"); // TODO: Remove this line after immplement EditLineDialog
+
+                    LineVisitor lineVisitor = new LineVisitor(line);
+                    lineVisitor.Accept(new ShapeSelectionVisitor());
                 }
             }
         }
@@ -108,11 +96,11 @@ namespace VectorGraphicViewer
         private void RenderGraphics()
         {
             ShapeFactory shapeFactory = new();
-            List<Graphic> graphics = ConvertGraphicsFile();
+            List<Graphic> graphics = ConvertToGraphicsModel();
             if (graphics.Count > 0)
                 graphics.ForEach(graphic => shapeFactory.CreateShape(graphic).Draw(canvas));
         }
-        private List<Graphic> ConvertGraphicsFile()
+        private List<Graphic> ConvertToGraphicsModel()
         {
             string data = File.ReadAllText("graphics.json");
             string fileName = ConfigurationManager.AppSettings["FileName"]!;

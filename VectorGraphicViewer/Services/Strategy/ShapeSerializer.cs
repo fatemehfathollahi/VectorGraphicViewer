@@ -2,7 +2,7 @@
 using VectorGraphicViewer.Contract;
 using VectorGraphicViewer.Model;
 
-namespace VectorGraphicViewer.Converters;
+namespace VectorGraphicViewer.Services.Strategy;
 public class ShapeSerializer
 {
     private readonly  ISerialization _serialization;

@@ -1,34 +1,122 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using VectorGraphicViewer.Model;
-using VectorGraphicViewer.Services;
+using VectorGraphicViewer.Services.Factory;
+using VectorGraphicViewer.View;
+using WinLine = System.Windows.Shapes.Line;
 
 namespace VectorGraphicViewer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
             RenderGraphics();
+            canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
         }
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+            System.Windows.Point mousePosition = e.GetPosition(canvas);
+
+            foreach (UIElement element in canvas.Children)
+            {
+                if (element is Ellipse circle && IsMouseOverCircle(circle, mousePosition))
+                {
+                    // circle.StrokeDashArray = new DoubleCollection() { 5, 2 };
+
+                    EditCircleDialog dialog = new EditCircleDialog(circle);
+                    double circleCenterX = Canvas.GetLeft(circle) + circle.Width / 2;
+                    double circleCenterY = Canvas.GetTop(circle) + circle.Height / 2;
+                    double circleRadius = circle.Width / 2;
+                    var circleBorderBrush = circle.Stroke as SolidColorBrush;
+
+                    dialog.CenterXTextBox.Text = circleCenterX.ToString();
+                    dialog.CenterYTextBox.Text = circleCenterY.ToString();
+                    dialog.RadiusTextBox.Text = circleRadius.ToString();
+                    dialog.comboBox.SelectedItem = circleBorderBrush!.Color;
+                    if (circle.Fill != null)
+                        dialog.fillCheckBox.IsChecked = true;
+                    if (dialog.ShowDialog() == true) { }
+                }
+                if (element is Polygon triangle && IsMouseOverTriangle(triangle, mousePosition))
+                {
+                    MessageBox.Show($"Clicked on Triangle");
+                    //TODO: Immplemnt EditTriangleDialog
+                }
+
+                // بررسی خطوط
+                if (element is WinLine line && IsMouseOverLine(line, mousePosition))
+                {
+                    MessageBox.Show($"Clicked on Line");
+                    //TODO: Immplement EditLineDialog
+                }
+            }
+        }
+        private bool IsMouseOverCircle(Ellipse circle, System.Windows.Point mousePosition)
+        {
+            double circleCenterX = Canvas.GetLeft(circle) + circle.Width / 2;
+            double circleCenterY = Canvas.GetTop(circle) + circle.Height / 2;
+            double circleRadius = circle.Width / 2;
+
+            double distance = Math.Sqrt(Math.Pow(mousePosition.X - circleCenterX, 2) + Math.Pow(mousePosition.Y - circleCenterY, 2));
+
+            return distance <= circleRadius;
+        }
+        private bool IsMouseOverLine(WinLine line, System.Windows.Point mousePosition)
+        {
+
+            double x1 = line.X1;
+            double y1 = line.Y1;
+            double x2 = line.X2;
+            double y2 = line.Y2;
+
+            double dx = x2 - x1;
+            double dy = y2 - y1;
+
+
+            double length = Math.Sqrt(dx * dx + dy * dy);
+
+
+            double unitX = dx / length;
+            double unitY = dy / length;
+
+
+            double vectorX = mousePosition.X - x1;
+            double vectorY = mousePosition.Y - y1;
+
+
+            double dotProduct = vectorX * unitX + vectorY * unitY;
+
+
+            return dotProduct >= 0 && dotProduct <= length;
+
+        }
+        private bool IsMouseOverTriangle(Polygon triangle, System.Windows.Point mousePosition)
+        {
+            return triangle.RenderedGeometry.FillContains(mousePosition);
+        }
+
         private void RenderGraphics()
         {
             ShapeFactory shapeFactory = new();
             List<Graphic> graphics = ConvertGraphicsFile();
-            if(graphics.Count > 0)
-               graphics.ForEach(graphic => shapeFactory.CreateShape(graphic).Draw(canvas));
+            if (graphics.Count > 0)
+                graphics.ForEach(graphic => shapeFactory.CreateShape(graphic).Draw(canvas));
         }
         private List<Graphic> ConvertGraphicsFile()
         {
             string data = File.ReadAllText("graphics.json");
             string fileName = ConfigurationManager.AppSettings["FileName"]!;
-            string fileExtension = Path.GetExtension(fileName);
+            string fileExtension = System.IO.Path.GetExtension(fileName);
 
             if (!string.IsNullOrEmpty(fileName))
             {

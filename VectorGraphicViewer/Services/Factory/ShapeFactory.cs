@@ -2,7 +2,7 @@
 using VectorGraphicViewer.Contract;
 using VectorGraphicViewer.Model;
 
-namespace VectorGraphicViewer.Services;
+namespace VectorGraphicViewer.Services.Factory;
 public class ShapeFactory : ShapeFactoryBase
 {
     public override IShapeFactory CreateShape(Graphic graphic)

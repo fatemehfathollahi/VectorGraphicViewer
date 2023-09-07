@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Text.Json;
 using VectorGraphicViewer.Contract;
+using VectorGraphicViewer.Converters;
 using VectorGraphicViewer.Model;
 using VectorGraphicViewer.ViewModel;
 
-namespace VectorGraphicViewer.Converters;
-
+namespace VectorGraphicViewer.Services.Strategy;
 public class JsonSerialization : ISerialization
 {
     public List<Graphic> Deserialize(string data)

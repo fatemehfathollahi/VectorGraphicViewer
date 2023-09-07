@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using VectorGraphicViewer.Contract;
 using VectorGraphicViewer.Model;
 
-namespace VectorGraphicViewer.Converters;
+namespace VectorGraphicViewer.Services.Strategy;
 public class XmlSerialization : ISerialization
 {
     public List<Graphic> Deserialize(string data)

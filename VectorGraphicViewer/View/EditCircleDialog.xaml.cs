@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using VectorGraphicViewer.Converters;
+using VectorGraphicViewer.Services.Factory;
+using VectorGraphicViewer.ViewModel;
 
 namespace VectorGraphicViewer.View
 {
     public partial class EditCircleDialog : Window
     {
         private Storyboard blinkStoryboard = null!;
-        public EditCircleDialog(Ellipse ellipse)
+        private Canvas Canvas;
+        private Ellipse Ellipse;
+        public EditCircleDialog(Ellipse ellipse, Canvas canvas)
         {
             InitializeComponent();
+            Ellipse = ellipse;
             RenderAnimition(ellipse);
+            Canvas = canvas;
             List<Color> colors = GetColors();
             comboBox.ItemsSource = colors;
         }
@@ -55,9 +63,47 @@ namespace VectorGraphicViewer.View
         {
             blinkStoryboard.Stop();
         }
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        internal void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            RenderShape();
         }
+        private void RenderShape()
+        {
+            CircleViewModel circleViewModel = DataContext as CircleViewModel;
+            if (circleViewModel != null)
+            {
+                ShapeFactory shapeFactory = new();
+                string color = ConvertHexColorToObject(circleViewModel.SelectedColor);
+                var shapedto = new ShapeDTO
+                {
+                    A = null!,
+                    B = null!,
+                    C = null!,
+                    Center = circleViewModel.CenterX + ";" + circleViewModel.CenterY,
+                    Color = color,
+                    Filled = circleViewModel.IsFillChecked,
+                    Radius = circleViewModel.Radius,
+                    Type = "circle"
+                };
+                Canvas.Children.Remove(Ellipse);
+                shapeFactory.CreateShape(ShapeMapper.ToGraphic(shapedto)).Draw(Canvas);
+            }
+
+        }
+        private string ConvertHexColorToObject(Color hexColor)
+        {
+            int alpha = hexColor.A;
+            int red = hexColor.R;
+            int green = hexColor.G;
+            int blue = hexColor.B;
+            string color = alpha + ";" + red + ";" + green + ";" + blue;
+            return color;
+        }
+        internal bool OnClosed()
+        {
+            throw new NotImplementedException();
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             blinkStoryboard.Stop(); // TODO

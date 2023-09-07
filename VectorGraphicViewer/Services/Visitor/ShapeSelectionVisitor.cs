@@ -2,26 +2,36 @@
 using System.Windows.Media;
 using System.Windows.Shapes;
 using VectorGraphicViewer.Contract;
+using VectorGraphicViewer.Converters;
+using VectorGraphicViewer.Model;
+using VectorGraphicViewer.Services.Factory;
 using VectorGraphicViewer.View;
+using VectorGraphicViewer.ViewModel;
 
 namespace VectorGraphicViewer.Services.Visitor;
 public class ShapeSelectionVisitor : IShapeVisitor
 {
+    System.Windows.Controls.Canvas Canvas;
+    public ShapeSelectionVisitor(Canvas canvas)
+    {
+        Canvas = canvas;
+    }
     public void Visit(CircleVisitor circleVisitor)
     {
         Ellipse circle = circleVisitor.Ellipse;
-        EditCircleDialog dialog = new EditCircleDialog(circle);
+        EditCircleDialog dialog = new EditCircleDialog(circle, Canvas);
         double circleCenterX = Canvas.GetLeft(circle) + circle.Width / 2;
         double circleCenterY = Canvas.GetTop(circle) + circle.Height / 2;
         double circleRadius = circle.Width / 2;
         var circleBorderBrush = circle.Stroke as SolidColorBrush;
-
-        dialog.CenterXTextBox.Text = circleCenterX.ToString();
-        dialog.CenterYTextBox.Text = circleCenterY.ToString();
-        dialog.RadiusTextBox.Text = circleRadius.ToString();
-        dialog.comboBox.SelectedItem = circleBorderBrush!.Color;
+        CircleViewModel circleViewModel = new CircleViewModel();
+        circleViewModel.CenterY = circleCenterY.ToString();
+        circleViewModel.CenterX = circleCenterX.ToString();
+        circleViewModel.Radius = circleRadius;
+        circleViewModel.SelectedColor = circleBorderBrush!.Color;
+        dialog.DataContext = circleViewModel;
         if (circle.Fill != null)
-            dialog.fillCheckBox.IsChecked = true;
+            circleViewModel.IsFillChecked = true;
         if (dialog.ShowDialog() == true) { }
     }
 

@@ -6,7 +6,7 @@ using VectorGraphicViewer.Contract;
 namespace VectorGraphicViewer.Model;
 public class Triangle : Shape, IShapeFactory
 {
-    public Triangle(Point a, Point b, Point c, bool filled, Color color)
+    public Triangle(Point a, Point b, Point c, bool? filled, Color color)
     {
         A = a;
         B = b;
@@ -17,7 +17,7 @@ public class Triangle : Shape, IShapeFactory
     public Point A { get; init; } = null!;
     public Point B { get; init; } = null!;
     public Point C { get; init; } = null!;
-    public bool Filled { get; init; }
+    public bool? Filled { get; init; }
 
     public void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
@@ -27,7 +27,7 @@ public class Triangle : Shape, IShapeFactory
             StrokeThickness = 1
         };
 
-        if (Filled)
+        if (Filled == true)
         {
             polygon.Fill = new SolidColorBrush(Color);
         }

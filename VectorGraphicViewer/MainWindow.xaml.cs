@@ -30,14 +30,14 @@ namespace VectorGraphicViewer
                 if (element is Ellipse circle && IsMouseOverCircle(circle, mousePosition))
                 {
                     CircleVisitor circleVisitor = new CircleVisitor(circle);
-                    circleVisitor.Accept(new ShapeSelectionVisitor());
+                    circleVisitor.Accept(new ShapeSelectionVisitor(canvas));
                 }
                 if (element is Polygon triangle && IsMouseOverTriangle(triangle, mousePosition))
                 {
                     MessageBox.Show($"Clicked on Triangle"); // TODO: Remove this line after immplement EditTriangleDialog
 
                     TriangleVisitor triangleVisitor = new TriangleVisitor(triangle);
-                    triangleVisitor.Accept(new ShapeSelectionVisitor());
+                    triangleVisitor.Accept(new ShapeSelectionVisitor(canvas));
 
                 }
                 if (element is WinLine line && IsMouseOverLine(line, mousePosition))
@@ -45,7 +45,7 @@ namespace VectorGraphicViewer
                     MessageBox.Show($"Clicked on Line"); // TODO: Remove this line after immplement EditLineDialog
 
                     LineVisitor lineVisitor = new LineVisitor(line);
-                    lineVisitor.Accept(new ShapeSelectionVisitor());
+                    lineVisitor.Accept(new ShapeSelectionVisitor(canvas));
                 }
             }
         }

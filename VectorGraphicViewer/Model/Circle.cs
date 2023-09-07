@@ -7,9 +7,9 @@ public class Circle : Shape, IShapeFactory
 {
     public Point Center { get; init; } = null!;
     public double Radius { get; init; }
-    public bool Filled { get; init; }
+    public bool? Filled { get; init; }
 
-    public Circle(Point center, double radius, bool filled, Color color)
+    public Circle(Point center, double radius, bool? filled, Color color)
     {
         Center = center;
         Radius = radius;
@@ -30,7 +30,7 @@ public class Circle : Shape, IShapeFactory
             StrokeThickness = 1
         };
 
-        if (Filled)
+        if (Filled == true)
         {
             circle.Fill = new SolidColorBrush(Color);
         }

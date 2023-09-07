@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using VectorGraphicViewer.Model;
 using VectorGraphicViewer.ViewModel;
 using Point = VectorGraphicViewer.Model.Point;
@@ -16,6 +17,7 @@ public static class ShapeMapper
                     ParsePoint(shapeDTO.C)!, ParsePoint(shapeDTO.Center)!,
                     shapeDTO.Radius, shapeDTO.Filled, ParseColor(shapeDTO.Color));
     }
+   
     private static Point? ParsePoint(string value)
     {
         if( value== null ) return null;

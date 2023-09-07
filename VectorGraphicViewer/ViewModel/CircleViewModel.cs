@@ -13,7 +13,8 @@ public class CircleViewModel : INotifyPropertyChanged
            (Color)ColorConverter.ConvertFromString("#FF0000"),   // Red
             (Color)ColorConverter.ConvertFromString("#0000FF"),   // Blue
             (Color)ColorConverter.ConvertFromString("#00FF00"),   // Green
-            (Color)ColorConverter.ConvertFromString("#FFFF00")    // Yellow
+            (Color)ColorConverter.ConvertFromString("#FFFF00"),    // Yellow
+             (Color)ColorConverter.ConvertFromString("#7FFF0000")    // Yellow
         };
     }
     private string _centerX;

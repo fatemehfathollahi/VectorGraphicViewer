@@ -38,7 +38,6 @@ namespace VectorGraphicViewer
 
                     TriangleVisitor triangleVisitor = new TriangleVisitor(triangle);
                     triangleVisitor.Accept(new ShapeSelectionVisitor(canvas));
-
                 }
                 if (element is WinLine line && IsMouseOverLine(line, mousePosition))
                 {

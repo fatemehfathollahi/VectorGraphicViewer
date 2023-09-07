@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using VectorGraphicViewer.Converters;
+using VectorGraphicViewer.Model;
 using VectorGraphicViewer.Services.Factory;
 using VectorGraphicViewer.ViewModel;
 
@@ -22,8 +23,8 @@ namespace VectorGraphicViewer.View
             Ellipse = ellipse;
             RenderAnimition(ellipse);
             Canvas = canvas;
-            List<Color> colors = GetColors();
-            comboBox.ItemsSource = colors;
+            //List<Color> colors = GetColors();
+            //comboBox.ItemsSource = colors;
         }
         private void RenderAnimition(Ellipse ellipse)
         {
@@ -85,10 +86,35 @@ namespace VectorGraphicViewer.View
                     Radius = circleViewModel.Radius,
                     Type = "circle"
                 };
+
                 Canvas.Children.Remove(Ellipse);
-                shapeFactory.CreateShape(ShapeMapper.ToGraphic(shapedto)).Draw(Canvas);
+
+                Graphic graphic = ShapeMapper.ToGraphic(shapedto);
+                shapeFactory.CreateShape(graphic).Draw(Canvas);
+
+                UpdateElement(graphic);
             }
 
+        }
+        private void UpdateElement(Graphic graphic)
+        {
+            double diameter = 2 * graphic.Radius;
+            var circle = new System.Windows.Shapes.Ellipse
+            {
+                Width = diameter,
+                Height = diameter,
+                Stroke = new SolidColorBrush(graphic.Color),
+                StrokeThickness = 1
+            };
+
+            if (graphic.Filled == true)
+            {
+                circle.Fill = new SolidColorBrush(graphic.Color);
+            }
+
+            Canvas.SetLeft(circle, graphic.Center.X - graphic.Radius);
+            Canvas.SetTop(circle, graphic.Center.Y - graphic.Radius);
+            Ellipse = circle;
         }
         private string ConvertHexColorToObject(Color hexColor)
         {

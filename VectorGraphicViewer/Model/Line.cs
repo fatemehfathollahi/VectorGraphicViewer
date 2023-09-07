@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Media;
 using VectorGraphicViewer.Contract;
 
@@ -16,12 +17,19 @@ public class Line : Shape, IShapeFactory
 
     public void Draw(Canvas canvas, double zoomLevel = 1.0)
     {
+        double sideLength = Math.Sqrt(Math.Pow(A.X - B.X, 2) + Math.Pow(A.Y - B.Y, 2)); 
+
+        if (sideLength > 100)
+        {
+            zoomLevel = sideLength / 100;
+        }
+
         var line = new System.Windows.Shapes.Line
         {
-            X1 = A.X,
-            Y1 = A.Y,
-            X2 = B.X,
-            Y2 = B.Y,
+            X1 = A.X * zoomLevel,
+            Y1 = A.Y * zoomLevel,
+            X2 = B.X * zoomLevel,
+            Y2 = B.Y * zoomLevel,
             Stroke = new SolidColorBrush(Color),
             StrokeThickness = 1
         };
